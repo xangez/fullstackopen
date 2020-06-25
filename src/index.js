@@ -1,56 +1,61 @@
 import React, {useState} from "react";
 import ReactDOM from "react-dom";
 
+const anecdotes = [
+	"If it hurts, do it more often",
+	"Adding manpower to a late software project makes it later!",
+	"The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+	"Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+	"Premature optimization is the root of all evil.",
+	"Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
+];
+
+// const Header = () => {
+
+// }
+
 const Button = ({handleClick, text}) => {
 	return <button onClick={handleClick}>{text}</button>;
 };
 
-const Statistic = ({text, value}) => {
+const Anecdote = ({anecdote, votes}) => {
 	return (
-		<tr>
-			<td>{text}</td>
-			<td>{value}</td>
-		</tr>
+		<p>
+			{anecdote} has: {votes} votes
+		</p>
 	);
 };
 
-const Statistics = ({good, neutral, bad}) => {
-	let all = good + bad + neutral;
-	let average = (good + bad * -1) / all;
-	let positive = good / all * 100;
+const App = ({anecdotes}) => {
+	const [selected, setSelected] = useState(0);
 
-	if (all === 0) {
-		return <p>No feedback given</p>;
-	}
+	const initialVotes = Array(anecdotes.length).fill(0);
+	const [votes, setVotes] = useState(initialVotes);
+
+	const getRandom = () => {
+		let newIndex = Math.floor(Math.random() * anecdotes.length);
+		setSelected(newIndex);
+	};
+
+	const addVote = () => {
+		const copy = [...votes];
+		copy[selected]++;
+		setVotes(copy);
+	};
+
+	const maxVotes = Math.max(...votes);
+	const mostVoted = anecdotes[votes.indexOf(maxVotes)];
+
 	return (
-    <table>
-      <tbody>
-        <Statistic text="good" value={good} />
-        <Statistic text="neutral" value={neutral} />
-        <Statistic text="bad" value={bad} />
-        <Statistic text="all" value={all} />
-        <Statistic text="average" value={average} />
-        <Statistic text="postive" value={positive} />
-      </tbody>
-    </table>
+		<div>
+			<h1>Anecdote of the Day</h1>
+			<Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
+			<Button handleClick={addVote} text={"vote"} />
+			<Button handleClick={getRandom} text={"Next Anecdote"} />
+			<h1>Anecdote with most votes</h1>
+			<Anecdote anecdote={mostVoted} votes={maxVotes} />
+		</div>
 	);
 };
 
-const App = () => {
-	const [good, setGood] = useState(0);
-	const [neutral, setNeutral] = useState(0);
-	const [bad, setBad] = useState(0);
-
-	return (
-		<>
-			<h1>Give Feedback</h1>
-			<Button handleClick={() => setGood(good + 1)} text="Good" />
-			<Button handleClick={() => setNeutral(neutral + 1)} text="Neutral" />
-			<Button handleClick={() => setBad(bad + 1)} text="Bad" />
-			<h1>Statistics</h1>
-      <Statistics good={good} neutral={neutral} bad={bad} />
-		</>
-	);
-};
-
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById("root"));
