@@ -1,25 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Hello = (props) => {
+const Statistics = ({ good, neutral, bad }) => {
+	let all = good + bad + neutral;
+	let average = (good + bad * -1) / all;
+	let positive = good / all * 100;
+
 	return (
 		<div>
-			<p>
-				Hello {props.name}, you are {props.age} years old
-			</p>
+			<h1>Statistics</h1>
+			<p>good {good}</p>
+			<p>neutral {neutral}</p>
+			<p>bad {bad}</p>
+			<p>all {all}</p>
+			<p>average {average}</p>
+			<p>positive {positive}%</p>
 		</div>
 	);
 };
 
 const App = () => {
-	const name = "Peter";
-	const age = 10;
+	const [good, setGood] = useState(0);
+	const [neutral, setNeutral] = useState(0);
+	const [bad, setBad] = useState(0);
 	return (
-		<>
-			<h1>Greetings</h1>
-			<Hello name="George" age={26 + 10} />
-			<Hello name={name} age={age} />
-		</>
+		<div>
+			<h1>Give Feedback</h1>
+			<button onClick={() => setGood(good + 1)}>good</button>
+			<button onClick={() => setNeutral(neutral + 1)}>neutral</button>
+			<button onClick={() => setBad(bad + 1)}>bad</button>
+			<Statistics good={good} bad={bad} neutral={neutral} />
+		</div>
 	);
 };
 
