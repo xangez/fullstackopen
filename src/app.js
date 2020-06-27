@@ -1,13 +1,11 @@
 import React from "react";
-import Course from "./components/course"
 
 const App = () => {
-
-	return (
-		<>
-      <Course />
-		</>
-	);
+  return (
+    <>
+    </>
+  )
+  
 };
 
 export default App;
