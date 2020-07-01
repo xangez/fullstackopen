@@ -24,18 +24,18 @@ const App = () => {
   const updateNumber = () => {
     const person = persons.find((person) => person.name === newName);
     const changedPerson = {...person, number: newNumber};
+
     personService
-      .update(newName, changedPerson)
+      .update(person.id, changedPerson)
       .then((returnedPerson) => {
         setPersons(
           persons.map((person) =>
             person.name !== newName ? person : returnedPerson
           )
         );
-        clearInput();
       })
       .catch((error) => {
-        alert("blah");
+        console.log(error);
       });
   };
 
@@ -47,6 +47,7 @@ const App = () => {
         );
         if (response) {
           updateNumber();
+          return true;
         } else {
           return true;
         }
@@ -73,7 +74,6 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: newName,
     };
     personService.createPerson(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
