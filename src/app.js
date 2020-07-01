@@ -1,28 +1,123 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import Countries from "./components/countryDisplay";
+import React, {useState, useEffect} from "react";
+import Persons from "./components/personsDisplay";
+import PersonForm from "./components/personForm";
+import Filter from "./components/filter";
+import personService from "./services/persons";
 
 const App = () => {
-  const [countries, setCountries] = useState([]);
-  const [filter, setFilter] = useState("");
+  const [persons, setPersons] = useState([]);
+  const [newName, setName] = useState("");
+  const [newNumber, setNumber] = useState("");
+  const [filterValue, setFilteredValue] = useState("");
 
   useEffect(() => {
-    axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
-      setCountries(response.data);
+    personService.getAll().then((initalPeople) => {
+      setPersons(initalPeople);
     });
   }, []);
 
+  const clearInput = () => {
+    setName("");
+    setNumber("");
+  };
+
+  const updateNumber = () => {
+    const person = persons.find((person) => person.name === newName);
+    const changedPerson = {...person, number: newNumber};
+    personService
+      .update(newName, changedPerson)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((person) =>
+            person.name !== newName ? person : returnedPerson
+          )
+        );
+        clearInput();
+      })
+      .catch((error) => {
+        alert("blah");
+      });
+  };
+
+  const checkPerson = () => {
+    for (let person of persons) {
+      if (person.name === newName) {
+        let response = window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        );
+        if (response) {
+          updateNumber();
+        } else {
+          return true;
+        }
+      }
+    }
+  };
+
+  const filterPersons = () => {
+    if (filterValue === "") {
+      return persons;
+    }
+    return persons.filter(
+      (item) =>
+        item.name.toLowerCase().startsWith(filterValue.toLowerCase()) === true
+    );
+  };
+
+  const addPerson = (e) => {
+    e.preventDefault();
+    if (checkPerson()) {
+      clearInput();
+      return;
+    }
+    const personObject = {
+      name: newName,
+      number: newNumber,
+      id: newName,
+    };
+    personService.createPerson(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
+      clearInput();
+    });
+  };
+
   const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+    setFilteredValue(e.target.value);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleNumberChange = (e) => {
+    setNumber(e.target.value);
+  };
+
+  const handleDelete = (id) => {
+    let result = window.confirm(`Delete ${id}?`);
+    if (result) {
+      personService.deletePerson(id);
+      let newList = persons.filter((person) => person.id !== id);
+      setPersons(newList);
+    } else {
+      return;
+    }
   };
 
   return (
     <div>
-      <div>
-        Find countries
-        <input onChange={handleFilterChange} />
-      </div>
-      <Countries filter={filter} countries={countries} setFilter={setFilter} />
+      <h2>Phonebook</h2>
+      <Filter handleFilterChange={handleFilterChange} />
+      <h2>Add a new</h2>
+      <PersonForm
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addPerson={addPerson}
+        newName={newName}
+        newNumber={newNumber}
+      />
+      <h2>Numbers</h2>
+      <Persons list={filterPersons()} handleDelete={handleDelete} />
     </div>
   );
 };

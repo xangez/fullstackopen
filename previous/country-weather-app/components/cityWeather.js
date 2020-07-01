@@ -8,7 +8,6 @@ const CityWeather = ({name, city}) => {
     const key = `${process.env.REACT_APP_WEATHER_KEY}`;
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${name}&units=metric&APPID=${key}`;
     axios.get(url).then((response) => {
-      console.log(response.data);
       setWeather(response.data);
     });
   }, []);
