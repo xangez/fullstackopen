@@ -2,24 +2,24 @@ import React from "react";
 
 const Person = ({person, handleDelete}) => {
   return (
-    <p>
+    <li className="personNumber">
       {person.name} {person.number}
       <button onClick={handleDelete}>delete</button>
-    </p>
+    </li>
   );
 };
 
 const Persons = ({list, handleDelete}) => {
   return (
-    <div>
+    <ul>
       {list.map((person, index) => (
         <Person
           key={index}
           person={person}
-          handleDelete={() => handleDelete(person.id)}
+          handleDelete={() => handleDelete(person.id, person.name)}
         />
       ))}
-    </div>
+    </ul>
   );
 };
 
