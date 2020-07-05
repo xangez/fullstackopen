@@ -1,8 +1,7 @@
 {
-  "name": "react-practise",
+  "name": "fullstackopen",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://xangez.github.io/react-practise",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
