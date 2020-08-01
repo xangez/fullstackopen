@@ -36,11 +36,7 @@ const App = () => {
     personService
       .update(person.id, changedPerson)
       .then((returnedPerson) => {
-        setPersons(
-          persons.map((person) =>
-            person.name !== newName ? person : returnedPerson
-          )
-        );
+        setPersons(persons.map((person) => (person.name !== newName ? person : returnedPerson)));
         showMessage(`${returnedPerson.name}'s number updated`);
       })
       .catch((error) => {
@@ -67,10 +63,7 @@ const App = () => {
     if (filterValue === "") {
       return persons;
     }
-    return persons.filter(
-      (item) =>
-        item.name.toLowerCase().startsWith(filterValue.toLowerCase()) === true
-    );
+    return persons.filter((item) => item.name.toLowerCase().startsWith(filterValue.toLowerCase()) === true);
   };
 
   const addPerson = (e) => {
@@ -83,11 +76,18 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    personService.createPerson(personObject).then((returnedPerson) => {
-      showMessage(`${returnedPerson.name} added`);
-      setPersons(persons.concat(returnedPerson));
-      clearInput();
-    });
+    personService
+      .createPerson(personObject)
+      .then((returnedPerson) => {
+        showMessage(`${returnedPerson.name} added`);
+        setPersons(persons.concat(returnedPerson));
+        clearInput();
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        showMessage(error.response.data.error);
+        clearInput();
+      });
   };
 
   const handleDelete = (id, name) => {
