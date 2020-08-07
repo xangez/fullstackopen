@@ -25,14 +25,14 @@ blogsRouter.post("/", (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: 0,
+    likes: body.likes,
   });
   blog
     .save()
     .then((savedBlog) => {
       response.json(savedBlog);
     })
-    .catch((error) => error);
+    .catch((error) => next(error));
 });
 
 blogsRouter.delete("/:id", (request, response, next) => {
