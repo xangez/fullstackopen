@@ -1,18 +1,18 @@
 const palindrome = require("../utils/for_testing").palindrome;
 
-test("palindrome of a", () => {
+test.skip("palindrome of a", () => {
   const result = palindrome("a");
 
   expect(result).toBe("a");
 });
 
-test("palindrome of react", () => {
+test.skip("palindrome of react", () => {
   const result = palindrome("react");
 
   expect(result).toBe("tcaer");
 });
 
-test("palindrome of releveler", () => {
+test.skip("palindrome of releveler", () => {
   const result = palindrome("releveler");
 
   expect(result).toBe("releveler");
