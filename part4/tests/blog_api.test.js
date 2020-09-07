@@ -57,10 +57,11 @@ const initialBlogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
+  // let blogObject = new Blog(initialBlogs[0]);
+  // await blogObject.save();
+  // blogObject = new Blog(initialBlogs[1]);
+  // await blogObject.save();
+  await Blog.collection.insert(initialBlogs);
 });
 
 test.skip("blogs are returned", async () => {
@@ -68,7 +69,7 @@ test.skip("blogs are returned", async () => {
   expect(response.body).toHaveLength(initialBlogs.length);
 });
 
-test("there is a specific blog within the returned blogs ", async () => {
+test.skip("there is a specific blog within the returned blogs ", async () => {
   const response = await api.get("/api/blogs");
   const contents = response.body.map((r) => r.title);
   expect(contents).toContain("React patterns");
@@ -78,6 +79,26 @@ test.skip("title of first blog", async () => {
   const response = await api.get("/api/blogs");
 
   expect(response.body[0].title).toBe("Making food");
+});
+
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "Something",
+    author: "lala",
+    url: "blob",
+    likes: 0,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+  const response = await api.get("/api/blogs");
+  const titles = response.body.map((r) => r.title);
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1);
+  expect(titles).toContain("Something");
 });
 
 afterAll(() => {
