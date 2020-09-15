@@ -58,7 +58,7 @@ const nonExistingId = async () => {
     url: "http://blog.cleancoder.com/blah",
     likes: 2,
   };
-  const blog = new Blog({newBlog});
+  const blog = new Blog(newBlog);
   await blog.save();
   await blog.remove();
 
