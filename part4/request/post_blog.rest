@@ -2,8 +2,9 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Making food",
+  "title": "jhgjhg",
   "author": "meee",
   "url": "blah",
-  "likes": 0
+  "likes": 0,
+  "userId": "5f61b74d837e3310336f59bb"
 }
