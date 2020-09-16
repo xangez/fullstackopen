@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const blogSchema = mongoose.Schema({
+const blogSchema = new mongoose.Schema({
   title: {
     type: String,
   },
@@ -13,6 +13,10 @@ const blogSchema = mongoose.Schema({
   },
   likes: {
     type: Number,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 
