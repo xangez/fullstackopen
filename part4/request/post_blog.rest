@@ -1,8 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYiIsImlkIjoiNWY2MWI3NGQ4MzdlMzMxMDMzNmY1OWJiIiwiaWF0IjoxNjAwMzE5OTM3fQ.ESLzj9jJMLF3-uaqWaflOcDY5839lw_L1AHletVB2lI
 
 {
-  "title": "jhgjhg",
+  "title": "happy",
   "author": "meee",
   "url": "blah",
   "likes": 0,
