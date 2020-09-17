@@ -50,6 +50,10 @@ describe("viewing a specfic blog", () => {
   });
 });
 
+test.skip("login with correct username and password succeeds", async () => {
+  await api.post("/api/login").send({username: "someone", password: "asdfg"}).expect(200);
+});
+
 describe("addition of a new blog", () => {
   test.skip("succeeds with valid data", async () => {
     const newBlog = {
@@ -61,6 +65,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", helper.token)
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -77,7 +82,7 @@ describe("addition of a new blog", () => {
     const newBlog = {
       title: "nothing",
     };
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api.post("/api/blogs").set("Authorization", helper.token).send(newBlog).expect(400);
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
@@ -90,6 +95,7 @@ describe("addition of a new blog", () => {
     };
     const response = await api
       .post("/api/blogs")
+      .set("Authorization", helper.token)
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -106,15 +112,19 @@ test.skip("succeeds with valid id", async () => {
   const changes = {
     likes: 10,
   };
-  const updatedBlog = await api.put(`/api/blogs/${blogToUpdate.id}`).send(changes);
-  expect(updatedBlog.body).toEqual(blogToUpdate);
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .set("Authorization", helper.token)
+    .send(changes)
+    .expect(200);
+  console.log(response.body);
 });
 
 //deleting a blog
 test.skip("deleting a blog", async () => {
   const blogsAtStart = await helper.blogsInDb();
   const blogToDelete = blogsAtStart[0];
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+  await api.delete(`/api/blogs/${blogToDelete.id}`).set("Authorization", helper.token).expect(204);
   const blogsAtEnd = await helper.blogsInDb();
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
 });
