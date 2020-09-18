@@ -14,14 +14,29 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  //check if user info is in local storage
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   //login with username and password
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
+      //send login info
       const user = await loginService.login({
         username,
         password,
       });
+      //save to local storage
+      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
+      //set user info
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -32,7 +47,6 @@ const App = () => {
       // }, 5000);
       console.log("Wrong credentials");
     }
-    console.log("logging in with, username, password");
   };
 
   //login jsx
@@ -53,6 +67,12 @@ const App = () => {
     </div>
   );
 
+  //logout
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem("loggedNoteappUser");
+  };
+
   //adding blogs form jsx
   // const blogForm = () => (
   //   <form onSubmit={addBlog}>
@@ -67,14 +87,15 @@ const App = () => {
         loginForm()
       ) : (
         <div>
-          <p>{user.name} logged-in</p>
+          <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
           blogForm()
+          <h2>Blogs</h2>
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
         </div>
       )}
-      <h2>Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
     </div>
   );
 };
