@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Blog from "./components/Blog";
+import SuccessMessage from "./components/SuccessMessage";
+import ErrorMessage from "./components/ErrorMessage";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -126,13 +128,13 @@ const App = () => {
       {user === null ? (
         <div>
           <h2>Log in to application</h2>
-          <p>{errorMessage}</p>
+          <ErrorMessage errorMessage={errorMessage} />
           {loginForm()}
         </div>
       ) : (
         <div>
           <h1>Blogging</h1>
-          <p>{successMessage}</p>
+          <SuccessMessage successMessage={successMessage} />
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {blogForm()}
