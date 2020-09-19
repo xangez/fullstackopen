@@ -5,7 +5,7 @@ const BlogForm = ({createBlog}) => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const addBlog = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     createBlog({
       title: title,
@@ -21,7 +21,7 @@ const BlogForm = ({createBlog}) => {
     <div>
       <div>
         <h2>Create new blog</h2>
-        <form onSubmit={addBlog}>
+        <form onSubmit={handleSubmit}>
           <div>
             Title:
             <input value={title} onChange={({target}) => setTitle(target.value)} />
