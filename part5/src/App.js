@@ -3,14 +3,13 @@ import Blogs from "./components/Blogs";
 import SuccessMessage from "./components/SuccessMessage";
 import ErrorMessage from "./components/ErrorMessage";
 import BlogForm from "./components/BlogForm";
+import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   //notification
@@ -33,46 +32,22 @@ const App = () => {
   }, []);
 
   //login with username and password
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (userInput) => {
     try {
       //send login info
-      const user = await loginService.login({
-        username,
-        password,
-      });
+      const user = await loginService.login(userInput);
       //save to local storage
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       //set user info
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setPassword("");
     } catch (exception) {
       setErrorMessage("Wrong username or password");
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
-      console.log("Wrong username or password");
     }
   };
-
-  //login jsx
-  const loginForm = () => (
-    <div>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input value={username} onChange={({target}) => setUsername(target.value)} />
-        </div>
-        <div>
-          password
-          <input value={password} onChange={({target}) => setPassword(target.value)} />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  );
 
   //logout
   const handleLogout = () => {
@@ -121,7 +96,7 @@ const App = () => {
         <div>
           <h2>Log in to application</h2>
           <ErrorMessage errorMessage={errorMessage} />
-          {loginForm()}
+          <LoginForm handleLogin={handleLogin} />
         </div>
       ) : (
         <div>
