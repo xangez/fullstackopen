@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const Blog = ({blog, addUpvote}) => {
+const Blog = ({blog, addUpvote, username, deleteBlog}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -22,6 +22,13 @@ const Blog = ({blog, addUpvote}) => {
     addUpvote(blog.id, {likes: blog.likes + 1});
   };
 
+  const removeBlog = () => {
+    const result = window.confirm(`Confirm delete ${blog.title} by ${blog.author}?`);
+    if (result) {
+      deleteBlog(blog.id);
+    }
+  };
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}
@@ -35,6 +42,11 @@ const Blog = ({blog, addUpvote}) => {
         <div>{blog.url}</div>
         <div style={{display: "inline"}}> likes {blog.likes}</div>
         <button onClick={upvote}>upvote</button>
+        {blog.user.username === username ? (
+          <button onClick={removeBlog} style={{display: "block"}}>
+            remove
+          </button>
+        ) : null}
       </div>
     </div>
   );

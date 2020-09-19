@@ -106,6 +106,15 @@ const App = () => {
     }
   };
 
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.deleteBlog(id);
+      blogService.getAll().then((blogs) => setBlogs(blogs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       {user === null ? (
@@ -125,7 +134,7 @@ const App = () => {
           <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
             <BlogForm createBlog={addBlog} />
           </Toggleable>
-          <Blogs blogs={blogs} addUpvote={addUpvote} />
+          <Blogs blogs={blogs} addUpvote={addUpvote} username={user.username} deleteBlog={deleteBlog} />
         </div>
       )}
     </div>
