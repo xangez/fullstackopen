@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 
-const SuccessMessage = ({successMessage}) => {
-  if (successMessage === "") {
-    return null;
+const SuccessMessage = ({ successMessage }) => {
+  if (successMessage === '') {
+    return null
   }
-  return <p>{successMessage}</p>;
-};
+  return <p>{successMessage}</p>
+}
 
-export default SuccessMessage;
+export default SuccessMessage

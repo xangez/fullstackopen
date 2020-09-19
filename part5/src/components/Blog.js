@@ -1,33 +1,33 @@
-import React, {useState} from "react";
+import React, { useState } from 'react'
 
-const Blog = ({blog, addUpvote, username, deleteBlog}) => {
+const Blog = ({ blog, addUpvote, username, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
-  const hideWhenVisible = {display: visible ? "none" : ""};
-  const showWhenVisible = {display: visible ? "" : "none"};
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   const upvote = () => {
-    addUpvote(blog.id, {likes: blog.likes + 1});
-  };
+    addUpvote(blog.id, { likes: blog.likes + 1 })
+  }
 
   const removeBlog = () => {
-    const result = window.confirm(`Confirm delete ${blog.title} by ${blog.author}?`);
+    const result = window.confirm(`Confirm delete ${blog.title} by ${blog.author}?`)
     if (result) {
-      deleteBlog(blog.id);
+      deleteBlog(blog.id)
     }
-  };
+  }
 
   return (
     <div style={blogStyle}>
@@ -40,16 +40,16 @@ const Blog = ({blog, addUpvote, username, deleteBlog}) => {
       </button>
       <div style={showWhenVisible}>
         <div>{blog.url}</div>
-        <div style={{display: "inline"}}> likes {blog.likes}</div>
+        <div style={{ display: 'inline' }}> likes {blog.likes}</div>
         <button onClick={upvote}>upvote</button>
         {blog.user.username === username ? (
-          <button onClick={removeBlog} style={{display: "block"}}>
+          <button onClick={removeBlog} style={{ display: 'block' }}>
             remove
           </button>
         ) : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
