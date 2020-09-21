@@ -40,7 +40,9 @@ const Blog = ({ blog, addUpvote, username, deleteBlog }) => {
       </button>
       <div style={showWhenVisible} className="toggleableContent">
         <div>{blog.url}</div>
-        <div style={{ display: 'inline' }}> likes {blog.likes}</div>
+        <div style={{ display: 'inline' }} className="likes">
+          likes {blog.likes}
+        </div>
         <button onClick={upvote} className="upvoteButton">
           upvote
         </button>
@@ -48,7 +50,9 @@ const Blog = ({ blog, addUpvote, username, deleteBlog }) => {
           <button onClick={removeBlog} style={{ display: 'block' }}>
             remove
           </button>
-        ) : null}
+        ) : (
+          <div>nothing</div>
+        )}
       </div>
     </div>
   )
