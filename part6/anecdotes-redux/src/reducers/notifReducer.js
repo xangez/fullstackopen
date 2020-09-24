@@ -1,34 +1,27 @@
 const notifReducer = (state = '', action) => {
   switch (action.type) {
-    case 'ANECDOTE_CREATED':
+    case 'SET_NOTIF':
       return action.message
-    case 'ANECDOTE_VOTED':
-      return action.message
-    case 'REMOVE-NOTIF':
+    case 'CLEAR-NOTIF':
       return action.message
     default:
       return state
   }
 }
 
-export const notifCreated = (message) => {
-  return {
-    type: 'ANECDOTE_CREATED',
-    message,
-  }
-}
+// const clearNotif = () => {
+//   return
+// }
 
-export const notifVoted = (message) => {
-  return {
-    type: 'ANECDOTE_VOTED',
-    message,
-  }
-}
-
-export const removeNotif = () => {
-  return {
-    type: 'REMOVE-NOTIF',
-    message: '',
+export const setNotif = (message, seconds) => {
+  return async (dispatch) => {
+    dispatch({ type: 'SET_NOTIF', message })
+    setTimeout(() => {
+      dispatch({
+        type: 'CLEAR-NOTIF',
+        message: '',
+      })
+    }, seconds * 1000)
   }
 }
 

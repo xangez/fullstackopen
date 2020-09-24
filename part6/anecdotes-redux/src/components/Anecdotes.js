@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { vote } from '../reducers/anecdoteReducer'
-import { notifVoted, removeNotif } from '../reducers/notifReducer'
+import { setNotif } from '../reducers/notifReducer'
 
 const Anecdote = ({ anecdote, handleClick }) => {
   return (
@@ -24,18 +24,15 @@ const Anecdotes = () => {
     return state.anecdotes.filter((anecdote) => anecdote.content.includes(state.filter))
   })
 
-  const voteEvents = (id, content) => {
-    dispatch(vote(id))
-    dispatch(notifVoted(`you voted '${content}'`))
-    setTimeout(() => {
-      dispatch(removeNotif())
-    }, 5000)
+  const voteEvents = async (anecdote) => {
+    dispatch(vote(anecdote))
+    dispatch(setNotif(`you voted '${anecdote.content}'`, 5))
   }
 
   return (
     <div>
       {anecdotes.map((anecdote) => (
-        <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => voteEvents(anecdote.id, anecdote.content)} />
+        <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => voteEvents(anecdote)} />
       ))}
     </div>
   )
